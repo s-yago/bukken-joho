@@ -179,6 +179,37 @@ tr.ng-row{background:#FDECEC}tr.warn-row{background:#FFF7E6}
 .tq-sec{margin-bottom:22px}
 .tq-sech{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:8px;padding:9px 14px;margin-bottom:8px;font-size:18px}
 .tq-sech .cpb{margin-left:auto;background:#fff}
+/* 使い方ボタンとマニュアル */
+.man-btn{font:inherit;font-size:17px;font-weight:700;background:var(--orange);color:#fff;border:0;border-radius:8px;padding:9px 18px;cursor:pointer;white-space:nowrap}
+.man-btn:hover{background:#D3752B}
+.man{position:fixed;inset:0;background:rgba(10,24,45,.55);z-index:200;display:flex;justify-content:flex-end}
+.man-box{background:#fff;width:min(860px,100%);height:100%;display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(0,0,0,.25)}
+.man-hd{display:flex;align-items:center;gap:12px;background:var(--navy);color:#fff;padding:14px 20px;border-bottom:5px solid var(--orange)}
+.man-hd b{font-size:22px}
+.man-x{font:inherit;font-size:16px;margin-left:auto;background:#fff;color:var(--navy);border:0;border-radius:7px;padding:7px 16px;font-weight:700;cursor:pointer}
+.man-body{position:relative;overflow:auto;padding:10px 26px 60px;font-size:18px;line-height:1.85}
+.man-toc{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 6px;position:sticky;top:0;background:#fff;padding:10px 0;border-bottom:1px solid var(--line)}
+.man-toc a{font-size:15px;color:var(--navy);background:#EDF1F7;border-radius:14px;padding:4px 13px;text-decoration:none;font-weight:600}
+.man-toc a:hover{background:var(--navy);color:#fff}
+.man-body h3{font-size:22px;color:var(--navy);border-left:7px solid var(--orange);padding-left:12px;margin:30px 0 10px;scroll-margin-top:130px}
+.man-body ol,.man-body ul{padding-left:1.4em}
+.man-body li{margin-bottom:10px}
+.man-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0}
+.man-flow div{border:2px solid var(--navy);border-radius:10px;padding:10px 12px;font-weight:700;color:var(--navy);font-size:18px}
+.man-flow span{display:inline-block;background:var(--orange);color:#fff;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;margin-right:8px}
+.man-flow small{display:block;font-weight:400;color:var(--mute);font-size:15px;margin-top:3px}
+.man-tip{background:#EEF4FB;border:1px solid #B6CBE4;border-radius:8px;padding:12px 16px;font-size:17px;margin:10px 0}
+.man-tip b{color:var(--navy)}
+.man-blue{background:#EEF4FB;border:1px solid #8FB0D9;padding:0 6px;border-radius:4px}
+.man-green{background:#F2F8F4;border:1px solid #A8D8BF;padding:0 6px;border-radius:4px}
+.man-red{color:var(--ng);font-weight:700}.man-yellow{color:var(--warn);font-weight:700}
+.man-body kbd{border:1px solid #9AA4B2;border-bottom-width:3px;border-radius:5px;padding:0 6px;font-size:15px;background:#F6F8FB}
+.man-body mark{background:#FFE08A;padding:0 3px;border-radius:3px}
+.man-tbl{width:100%;border-collapse:collapse;margin:10px 0;font-size:17px}
+.man-tbl th{width:30%;background:#EDF1F7;color:var(--navy);text-align:left;vertical-align:top}
+.man-qa dt{font-weight:700;color:var(--navy);margin-top:14px}
+.man-qa dd{margin:4px 0 0 1em}
+@media print{.man-btn,.man{display:none!important}}
 @media print{header,nav,.btnrow,.drop,.tabs{display:none}body{background:#fff}}
 </style>
 </head>
@@ -187,6 +218,7 @@ tr.ng-row{background:#FDECEC}tr.warn-row{background:#FFF7E6}
 <header>
   <h1 onclick="go('top')">ViVi 物件情報ツール</h1>
   <div class="now">現在の物件<br><b id="nowName">未設定</b></div>
+  <button class="man-btn" onclick="openManual()">？ 使い方</button>
 </header>
 
 <nav id="nav" class="hide">
@@ -366,6 +398,92 @@ tr.ng-row{background:#FDECEC}tr.warn-row{background:#FFF7E6}
   </section>
 </div>
 
+</div>
+
+<div id="manual" class="man hide" onclick="if(event.target===this)closeManual()">
+ <div class="man-box" role="dialog" aria-label="使い方マニュアル">
+  <div class="man-hd"><b>使い方マニュアル</b><button class="man-x" onclick="closeManual()">閉じる ✕</button></div>
+  <div class="man-body" id="manBody">
+   <nav class="man-toc">
+    <a href="#m-zentai">全体の流れ</a><a href="#m-info">物件情報</a><a href="#m-copy">貼り先コピー</a>
+    <a href="#m-check">重説突合</a><a href="#m-toku">特約</a><a href="#m-save">保存と読み込み</a><a href="#m-chui">注意すること</a><a href="#m-qa">困ったとき</a>
+   </nav>
+
+   <h3 id="m-zentai">全体の流れ</h3>
+   <p>このツールは、<b>物件の情報を1回だけ入力して、いろいろな場所に使い回す</b>ための道具です。</p>
+   <div class="man-flow">
+    <div><span>1</span>物件情報<small>登記・インフォマップを読み込む</small></div>
+    <div><span>2</span>貼り先コピー<small>ハトサポ・SUUMOなどへ貼る</small></div>
+    <div><span>3</span>重説突合<small>重説・契約書の間違い探し</small></div>
+    <div><span>4</span>特約<small>質問に答えて特約を作る</small></div>
+   </div>
+   <p>売り出し前は1と2、契約前は3と4を使います。どの画面から始めても大丈夫です。</p>
+
+   <h3 id="m-info">1. 物件情報</h3>
+   <ol>
+    <li><b>種別を選ぶ</b>　「マンション」か「土地・戸建」を押します。登記を読み込めば自動で切り替わります。</li>
+    <li><b>登記事項証明書のPDFを入れる</b>　法務局のオンライン取得版（全部事項）を、点線の枠にドラッグします。戸建は<b>土地と建物の両方</b>を入れてください。
+      <br>→ 所在・面積・新築年月・所有者・抵当権などが<span class="man-blue">青い欄</span>に自動で入ります。</li>
+    <li><b>インフォマップとやまを貼る</b>　インフォマップで表を出し、表の上で <kbd>Ctrl</kbd>+<kbd>A</kbd> → <kbd>Ctrl</kbd>+<kbd>C</kbd>。ツールの欄に <kbd>Ctrl</kbd>+<kbd>V</kbd> で貼り、「読み取る」を押します。
+      <br>→ 用途地域・建蔽率・容積率などが<span class="man-green">緑の欄</span>に入ります。</li>
+    <li><b>残りを手で入れる</b>　管理費・販売価格・道路幅員など、書類にない項目を入力します。</li>
+   </ol>
+   <div class="man-tip"><b>ポイント</b>　登記の下線（抹消された記載）は自動で除外します。抵当権が残っていれば赤い枠で表示され、重説に写す文章をそのままコピーできます。</div>
+
+   <h3 id="m-copy">2. 貼り先コピー</h3>
+   <ol>
+    <li>上のボタンで貼り先（ハトサポ・SUUMO・アットホーム・ホームズ・自社サイト・ZOHO）を選びます。</li>
+    <li>その貼り先の入力順に項目が並ぶので、上から順に「コピー」→ 貼り付け、を繰り返します。</li>
+   </ol>
+   <div class="man-tip"><b>ポイント</b>　専有面積は、ハトサポでは<b>内法（登記の面積）</b>、ポータルでは<b>壁芯（販売資料の面積）</b>を自動で出し分けます。</div>
+
+   <h3 id="m-check">3. 重説突合</h3>
+   <ol>
+    <li>ハトサポで作った<b>重要事項説明書</b>と<b>売買契約書</b>のPDFを、それぞれの枠に入れます。</li>
+    <li>「突合する」を押します。</li>
+    <li>物件情報の内容が書面に書かれているかを1項目ずつ照合し、<span class="man-red">赤＝要修正</span>、<span class="man-yellow">黄＝目視確認</span>で表示します。</li>
+   </ol>
+   <div class="man-tip"><b>ポイント</b>　「×」は、その値が書面の中から見つからなかったという意味です。書き間違いのほか、表記の違い（内法と壁芯など）でも出ます。<b>赤が出たら必ず現物を確認してください。</b>登記に残っている抵当権などが重説に書かれているかも、受付番号で照合します。</div>
+
+   <h3 id="m-toku">4. 特約</h3>
+   <ol>
+    <li>質問に「はい／いいえ／わからない」などで答えていきます。答えに応じて、次の質問が出たり消えたりします。</li>
+    <li>登記・インフォマップ・物件情報から分かる質問は、<b>最初から答えが入っています</b>（「自動：〇〇」と表示）。違っていれば押し直してください。</li>
+    <li>下の「完成した特約」に、答えに合わせた文章ができあがります。</li>
+   </ol>
+   <table class="man-tbl">
+    <tr><th>売買契約書の特約</th><td>基本セットに必要な特約を足したり外したりして、<b>番号を振り直した完成版</b>です。全文コピーも、1件ずつのコピーもできます。</td></tr>
+    <tr><th>重説の各欄</th><td>「売主の表示」「登記記録」「法令に基づく制限」など、<b>重説の欄ごと</b>に分けて出します。欄ごと・1件ごとにコピーできます。</td></tr>
+    <tr><th>要調査・未回答</th><td>「わからない」と答えた項目と、まだ答えていない質問の一覧です。</td></tr>
+   </table>
+   <div class="man-tip"><b>ポイント</b>　<mark>〇〇</mark>と黄色になっている部分は、物件ごとに書き換える場所です。貼り付けたあと、必ず埋めてください。「未回答の質問だけ表示」にチェックを入れると、答え忘れを探しやすくなります。</div>
+
+   <h3 id="m-save">保存と読み込み</h3>
+   <p>このツールは、<b>入力した内容を自動では保存しません。</b>画面を閉じると消えます。</p>
+   <ol>
+    <li><b>保存する</b>　TOP画面の「この物件を保存」を押すと、物件名のファイル（〇〇.json）がパソコンに保存されます。特約の答えも一緒に保存されます。</li>
+    <li><b>続きをやる</b>　TOP画面の「保存した物件を読み込む」で、そのファイルを選びます。</li>
+   </ol>
+   <div class="man-tip"><b>ポイント</b>　保存したファイルを共有フォルダに置けば、営業さんが入力した物件を、事務さんが開いて続きを作業できます。</div>
+
+   <h3 id="m-chui">注意すること</h3>
+   <ul>
+    <li>このツールは<b>「怪しいところを拾う」道具</b>です。最終確認は必ず人が原本で行ってください。</li>
+    <li>紙をスキャンしたPDFは、<b>文字が入ったPDF（サーチャブルPDF）</b>でないと読めません。</li>
+    <li>登記事項証明書が3か月以上前のものだと警告が出ます。重説には最新の登記を取り直してください。</li>
+    <li>読み込んだPDFや入力した内容は、インターネットには送られません。このパソコンの中だけで処理しています。</li>
+   </ul>
+
+   <h3 id="m-qa">困ったとき</h3>
+   <dl class="man-qa">
+    <dt>登記のPDFを入れても何も出ない</dt><dd>スキャンした画像のPDFの可能性があります。法務局のオンライン取得版か、サーチャブルPDFで取り直してください。</dd>
+    <dt>読み取った値が原本と違う</dt><dd>その欄を直接書き換えてください。書き換えた欄は青色が消え、手入力の扱いになります。違っていた登記は、社内のツール担当に伝えてください。</dd>
+    <dt>インフォマップが「読み取れませんでした」になる</dt><dd>表の部分だけでなく、項目名（用途地域・建蔽率など）ごとコピーできているか確認してください。</dd>
+    <dt>特約に必要な文章が出てこない／余計な文章が出る</dt><dd>質問の答えを見直してください。それでも合わないときは、物件と答えの内容を社内のツール担当に伝えてください。</dd>
+    <dt>間違えて画面を閉じた</dt><dd>保存していない内容は元に戻せません。こまめに「この物件を保存」を押してください。</dd>
+   </dl>
+  </div>
+ </div>
 </div>
 
 <script>
@@ -1590,6 +1708,19 @@ function loadJsonFile(e){
 function renderAll(){
   setType(ptype); renderFields(); renderInfomap(); renderTouki(); refreshName(); renderTQ(); renderCopy();
 }
+
+
+/* ========== 使い方マニュアル ========== */
+function openManual(){
+  const m=document.getElementById("manual"); m.classList.remove("hide");
+  const cur=["info","copy","check","toku"].find(x=>!document.getElementById("s-"+x).classList.contains("hide"));
+  const t=document.getElementById(cur?"m-"+cur:"m-zentai"); const b=document.getElementById("manBody");
+  if(cur) t.scrollIntoView({block:"start"}); else b.scrollTop=0;
+}
+function closeManual(){ document.getElementById("manual").classList.add("hide"); }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeManual(); });
+document.querySelectorAll(".man-toc a").forEach(a=>a.addEventListener("click",e=>{
+  e.preventDefault(); const t=document.querySelector(a.getAttribute("href")); t.scrollIntoView({block:"start",behavior:"smooth"}); }));
 
 /* ========== 初期化 ========== */
 bindDrop("dropA","fileA","statA","rawA",t=>textA=t);
